@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myblog.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.myblog.model.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="is_usable" jdbcType="BIT" property="isUsable" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update blog_user
+    set is_usable = 0
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.myblog.model.User">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into blog_user (user_name, login_name, password, 
+      email, create_time, is_usable, 
+      token)
+    values (#{userName,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{isUsable,jdbcType=BIT}, 
+      #{token,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.myblog.model.User">
+    update blog_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      login_name = #{loginName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_usable = #{isUsable,jdbcType=BIT},
+      token = #{token,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, user_name, login_name, password, email, create_time, is_usable, token
+    from blog_user
+    where id = #{id,jdbcType=INTEGER}
+    and is_usable = 1
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, user_name, login_name, password, email, create_time, is_usable, token
+    from blog_user
+    where is_usable = 1
+  </select>
+  <select id="selectByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, user_name, login_name, password, email, create_time, is_usable, token
+    from blog_user
+    where email = #{email,jdbcType=VARCHAR}
+  </select>
+</mapper>
