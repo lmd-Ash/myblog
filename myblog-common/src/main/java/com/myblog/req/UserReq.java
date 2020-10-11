@@ -35,6 +35,11 @@ public class UserReq extends BaseReq implements Serializable {
     private String password;
 
     /**
+     * 旧密码
+     */
+    private String oldPassword;
+
+    /**
      * 邮箱
      */
     private String email;

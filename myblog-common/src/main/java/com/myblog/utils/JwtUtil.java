@@ -130,6 +130,7 @@ public class JwtUtil {
      * @return
      */
     public static Claims getClaim(String token) {
+        token = token.replaceFirst(TOKEN_PREFIX, "");
         try {
             return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
         } catch (Exception e) {

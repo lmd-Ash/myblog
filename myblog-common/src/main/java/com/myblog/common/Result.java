@@ -80,6 +80,13 @@ public class Result<T> implements Serializable {
     }
 
     /**
+     * build保存成功返回结果
+     */
+    public static <T> com.myblog.common.Result<T> buildSaveOk() {
+        return new com.myblog.common.Result<T>(com.myblog.common.Msg.OK, com.myblog.common.Msg.TEXT_SAVE_OK, null);
+    }
+
+    /**
      * build修改成功返回结果
      */
     public static <T> com.myblog.common.Result<T> buildUpdateOk(T data) {

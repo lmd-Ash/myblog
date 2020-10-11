@@ -28,6 +28,9 @@ import java.util.Objects;
 @Component
 @Slf4j
 public class TokenInterceptor extends HandlerInterceptorAdapter {
+    /**
+     * session用户Key
+     */
     @Value("${session.user.key}")
     private String userSession;
     @Autowired

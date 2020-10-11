@@ -4,6 +4,7 @@ import com.myblog.mapper.UserMapper;
 import com.myblog.model.User;
 import com.myblog.service.UserService;
 import com.myblog.utils.JwtUtil;
+import com.myblog.utils.MD5Util;
 import com.myblog.vo.TokenVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,12 +46,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TokenVo login(User user) {
-       return null;
+        TokenVo tokenVo = new TokenVo();
+        String token = null;
+        token = JwtUtil.createToken(user.getId().toString());
+        user.setToken(token);
+        int update = userMapper.updateByPrimaryKey(user);
+        if (update < 1) {
+            return tokenVo.setIfSuccess(false);
+        }
+        tokenVo.setToken(token);
+        return tokenVo.setIfSuccess(true);
     }
 
     @Override
     public TokenVo register(User user) {
         TokenVo tokenVo = new TokenVo();
+        //使用MD5加密密码
+        user.setPassword(MD5Util.stringMD5(user.getPassword()));
         user.setIsUsable(true);
         user.setCreateTime(new Date());
         int insert = userMapper.insert(user);
