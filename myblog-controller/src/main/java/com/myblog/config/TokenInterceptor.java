@@ -90,7 +90,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         HttpSession session = request.getSession();
-        log.debug("token验证通过用户信息为：{}", user);
+        log.info("token验证通过用户信息为：{}，token为：{}", user, token);
         session.setAttribute(userSession, user);
         return true;
     }

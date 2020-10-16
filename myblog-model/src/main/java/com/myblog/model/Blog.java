@@ -37,6 +37,21 @@ public class Blog implements Serializable {
     private Date createTime;
 
     /**
+     * 创建人
+     */
+    private Integer createUserId;
+
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
+
+    /**
+     * 修改人
+     */
+    private Integer updateUserId;
+
+    /**
      * 博客被观看次数
      */
     private Integer seeNum;

@@ -41,6 +41,25 @@ public class BlogReq extends BaseReq implements Serializable {
     private Date createTime;
 
     /**
+     * 创建人
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Integer createUserId;
+
+    /**
+     * 修改时间
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updateTime;
+
+    /**
+     * 修改人
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Integer updateUserId;
+
+    /**
      * 博客被观看次数
      */
     @JsonSerialize(using = ToStringSerializer.class)
