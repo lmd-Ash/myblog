@@ -3,7 +3,7 @@
 <mapper namespace="com.myblog.mapper.BlogMapper">
   <resultMap id="BaseResultMap" type="com.myblog.model.Blog">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="blog_type" jdbcType="VARCHAR" property="blogType" />
+    <result column="blog_type" jdbcType="INTEGER" property="blogType" />
     <result column="see_num" jdbcType="INTEGER" property="seeNum" />
     <result column="comment_num" jdbcType="INTEGER" property="commentNum" />
     <result column="praise_num" jdbcType="INTEGER" property="praiseNum" />
@@ -30,7 +30,7 @@
       create_time, create_user_id, update_time, 
       update_user_id, blog_title, blog_abstract
       )
-    values (#{blogType,jdbcType=VARCHAR}, #{seeNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER}, 
+    values (#{blogType,jdbcType=INTEGER}, #{seeNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER},
       #{praiseNum,jdbcType=INTEGER}, #{blogKeyword,jdbcType=VARCHAR}, #{isUsable,jdbcType=BIT}, 
       #{createTime,jdbcType=DATE}, #{createUserId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{updateUserId,jdbcType=INTEGER}, #{blogTitle,jdbcType=LONGVARCHAR}, #{blogAbstract,jdbcType=LONGVARCHAR}
@@ -38,7 +38,7 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.myblog.model.Blog">
     update blog
-    set blog_type = #{blogType,jdbcType=VARCHAR},
+    set blog_type = #{blogType,jdbcType=INTEGER},
       see_num = #{seeNum,jdbcType=INTEGER},
       comment_num = #{commentNum,jdbcType=INTEGER},
       praise_num = #{praiseNum,jdbcType=INTEGER},
@@ -65,25 +65,60 @@
     from blog
     where is_usable = 1
   </select>
+  <select id="pageAll" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select id, blog_type, see_num, comment_num, praise_num, blog_keyword, is_usable,
+    create_time, create_user_id, update_time, update_user_id, blog_title, blog_abstract
+    from blog
+    where is_usable = 1
+    <if test="blogKeyword != null or blogKeyword !=''">
+      and blog_keyword like concat('%',#{blogKeyword},'%')
+    </if>
+    <if test="blogType != null">
+      and blog_type = #{blogType}
+    </if>
+    <if test="blogTitle != null or blogTitle !=''">
+      and blog_title like concat('%',#{blogTitle},'%')
+    </if>
+    order by create_time desc
+    limit #{page},#{pageSize}
+  </select>
+  <select id="countAll" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT count(0) FROM blog where is_usable = 1
+    <if test="blogKeyword != null or blogKeyword !=''">
+      and blog_keyword like concat('%',#{blogKeyword},'%')
+    </if>
+    <if test="blogType != null">
+      and blog_type = #{blogType}
+    </if>
+    <if test="blogTitle != null or blogTitle !=''">
+      and blog_title like concat('%',#{blogTitle},'%')
+    </if>
+  </select>
   <select id="selectByBlogKeyword" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, blog_type, see_num, comment_num, praise_num, blog_keyword, is_usable,
     create_time, create_user_id, update_time, update_user_id, blog_title, blog_abstract
     from blog
     where is_usable = 1
-    and blog_keyword like concat('%',#{blogKeyword},'%')
+    <if test="blogKeyword != null or blogKeyword !=''">
+      and blog_keyword like concat('%',#{blogKeyword},'%')
+    </if>
   </select>
   <select id="selectByBlogType" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, blog_type, see_num, comment_num, praise_num, blog_keyword, is_usable,
     create_time, create_user_id, update_time, update_user_id, blog_title, blog_abstract
     from blog
     where is_usable = 1
-    and blog_type = #{blogType,jdbcType=VARCHAR}
+    <if test="blogType != null">
+      and blog_type = #{blogType}
+    </if>
   </select>
   <select id="selectByBlogTitle" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, blog_type, see_num, comment_num, praise_num, blog_keyword, is_usable,
     create_time, create_user_id, update_time, update_user_id, blog_title, blog_abstract
     from blog
     where is_usable = 1
-    and blog_title like concat('%',#{blogTitle},'%')
+    <if test="blogTitle != null or blogTitle !=''">
+      and blog_title like concat('%',#{blogTitle},'%')
+    </if>
   </select>
 </mapper>

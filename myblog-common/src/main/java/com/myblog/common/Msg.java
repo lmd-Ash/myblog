@@ -20,6 +20,7 @@ public interface Msg {
     String TEXT_CANCEL_OK = "取消成功";
     String TEXT_DELETE_OK = "删除成功";
     String TEXT_QUERY_OK = "查询成功";
+    String TEXT_LIKE_OK = "点赞成功";
 
     Integer CANCEL = 210;
     String TEXT_CANCEL = "商户已注销，请联系客服重新开通";
@@ -29,6 +30,7 @@ public interface Msg {
     String TEXT_LOGOUT_FAIL = "注销失败";
     String TEXT_OLD_PASSWORD_FAIL = "原密码不正确";
     String TEXT_EMAIL_EXIST = "邮箱已经被注册";
+    String TEXT_LIKE_FAIL = "点赞失败，请重试";
 
     Integer PARAM_FAIL = 310;
     String TEXT_PARAM_FAIL = "参数不全";
@@ -49,6 +51,9 @@ public interface Msg {
     String TEXT_DATA_REPEAT_FAIL = "数据重复";
     String TEXT_USER_DATA_FAIL = "用户不存在,请先注册";
 
+    Integer BLOG_FAIL = 350;
+    String BLOG_DELETE_FAIL = "博客已被删除，请刷新页面";
+
     Integer LOGIN_FAIL = 410;
     String TEXT_LOGIN_FAIL = "用户名或密码不正确";
     String TEXT_IS_SEAL_UP_FAIL = "账号被封停";
@@ -65,9 +70,24 @@ public interface Msg {
     String TEXT_MODIFY_PASSWORD_UNSAFE_FAIL = "密码安全度过低,请重新设置当前密码";
 
     Integer SYSTEM_FAIL = 500;
-    String TEXT_SYSTEM_FAIL = "不受火冀望的，比比皆是。因此，你毋须畏惧黑暗,大啖食粮之刻已到";
+    String TEXT_SYSTEM_FAIL = "不受火冀望的，比比皆是。\n" +
+            "你们人类不消说，我们亦是如此。\n" +
+            "放眼看看这座城市吧！\n" +
+            "互为同道中人的事实，显而易见。\n" +
+            "因此你毋需畏惧黑暗，大啖食粮之刻已至";
 
     Integer REQUEST_FAIL = 501;
     String TEXT_REQUEST_FAIL = "请求方式错误，当前请求方式为[#nowReq#],实际支持请求方式为[#req#]";
+
+    /**
+     * 不受火之冀望的人，比比皆是。
+     * 你们火主不消说，我们也是如此。
+     * 看看米狄尔门口梯子上的血迹吧，
+     * 互为同道中人的事实，显而易见。
+     * 太阳骑士渴望余火，被米狄尔吞噬了理智，
+     * 然而他与所追求之物还隔着天堑之路。
+     * 即使是讨伐深渊者，也无法肉身抵抗坠渊侵蚀。
+     * 因此，你毋需畏惧黑暗，大啖食粮之刻已至。
+     */
 
 }

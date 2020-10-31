@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 评论表
+ *
  * @author lmd
  */
 @Data

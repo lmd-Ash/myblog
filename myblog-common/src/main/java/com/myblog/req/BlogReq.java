@@ -31,7 +31,7 @@ public class BlogReq extends BaseReq implements Serializable {
     /**
      * 博客分类
      */
-    private String blogType;
+    private Integer blogType;
 
     /**
      * 创建时间

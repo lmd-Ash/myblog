@@ -24,40 +24,34 @@ public class BlogServiceImpl implements BlogService {
     private BlogMapper blogMapper;
 
     @Override
-    public Integer save(Blog blog, User user) {
+    public Integer saveBlog(Blog blog, User user) {
         blog.setIsUsable(true);
-        //如果id没有，代表是新写的blog，观看数，评论数，被赞数都为0
-        if (Objects.isNull(blog.getId())) {
-            blog.setCreateTime(new Date());
-            blog.setCreateUserId(user.getId());
-            blog.setCommentNum(0);
-            blog.setPraiseNum(0);
-            blog.setSeeNum(0);
-            int insert = blogMapper.insert(blog);
-            return insert;
-        }
-        blog.setUpdateTime(new Date());
-        blog.setUpdateUserId(user.getId());
-        int update = blogMapper.updateByPrimaryKey(blog);
-        return update;
+        //新写的blog，观看数，评论数，被赞数都为0
+        blog.setCreateTime(new Date());
+        blog.setCreateUserId(user.getId());
+        blog.setCommentNum(0);
+        blog.setPraiseNum(0);
+        blog.setSeeNum(0);
+        int insert = blogMapper.insert(blog);
+        return insert;
     }
 
     @Override
-    public Blog findByBlogKeyword(String blogKeyword) {
-        Blog blog = blogMapper.selectByBlogKeyword(blogKeyword);
+    public List<Blog> pageAll(Blog blog, Integer page, Integer pageSize) {
+        List<Blog> list = blogMapper.pageAll(blog, page, pageSize);
+        return list;
+    }
+
+    @Override
+    public Blog findById(Integer id) {
+        Blog blog = blogMapper.selectByPrimaryKey(id);
         return blog;
     }
 
     @Override
-    public Blog findByBlogType(String blogType) {
-        Blog blog = blogMapper.selectByBlogType(blogType);
-        return blog;
-    }
-
-    @Override
-    public Blog findByBlogTitle(String blogTitle) {
-        Blog blog = blogMapper.selectByBlogTitle(blogTitle);
-        return blog;
+    public Long countAll(Blog blog) {
+        Long counts = blogMapper.countAll(blog);
+        return counts;
     }
 
     @Override
@@ -67,12 +61,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Boolean likeBlog(Integer blogId) {
-        //根据博客id查询博客，判断博客是否存在
-        Blog blog = blogMapper.selectByPrimaryKey(blogId);
-        if (Objects.isNull(blog)) {
-            return false;
-        }
+    public Boolean likeBlog(Blog blog) {
         //点赞数+1
         blog.setPraiseNum(blog.getPraiseNum() + 1);
         //更新博客
@@ -84,7 +73,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Integer delete(Integer id) {
+    public Integer deleteBlog(Integer id) {
         int delete = blogMapper.deleteByPrimaryKey(id);
         return delete;
     }

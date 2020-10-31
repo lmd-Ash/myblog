@@ -12,37 +12,39 @@ import java.util.List;
  */
 public interface BlogService {
     /**
-     * 保存/修改 博客
+     * 保存博客
      *
      * @param blog
      * @param user
      * @return
      */
-    Integer save(Blog blog, User user);
+    Integer saveBlog(Blog blog, User user);
 
     /**
-     * 根据博客关键词查询博客
+     * 分页查询博客
      *
-     * @param blogKeyword
+     * @param blog
+     * @param page     当前页
+     * @param pageSize 每页数量
      * @return
      */
-    Blog findByBlogKeyword(String blogKeyword);
+    List<Blog> pageAll(Blog blog, Integer page, Integer pageSize);
 
     /**
-     * 根据博客分类查询博客
+     * 根据id查询博客
      *
-     * @param blogType
+     * @param id
      * @return
      */
-    Blog findByBlogType(String blogType);
+    Blog findById(Integer id);
 
     /**
-     * 根据博客标题查询博客
+     * 计算总条数
      *
-     * @param blogTitle
+     * @param blog
      * @return
      */
-    Blog findByBlogTitle(String blogTitle);
+    Long countAll(Blog blog);
 
     /**
      * 查询所有博客
@@ -54,11 +56,10 @@ public interface BlogService {
     /**
      * 对该博客点赞
      *
-     * @param blogId
+     * @param blog
      * @return
      */
-    Boolean
-    likeBlog(Integer blogId);
+    Boolean likeBlog(Blog blog);
 
     /**
      * 删除博客
@@ -66,5 +67,5 @@ public interface BlogService {
      * @param id
      * @return
      */
-    Integer delete(Integer id);
+    Integer deleteBlog(Integer id);
 }

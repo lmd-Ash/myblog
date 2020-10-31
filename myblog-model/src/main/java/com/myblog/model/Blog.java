@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 博客表
+ *
  * @author lmd
  */
 @Data
@@ -29,7 +31,7 @@ public class Blog implements Serializable {
     /**
      * 博客分类
      */
-    private String blogType;
+    private Integer blogType;
 
     /**
      * 创建时间
