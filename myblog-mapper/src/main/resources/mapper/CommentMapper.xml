@@ -12,8 +12,7 @@
     <result column="is_usable" jdbcType="BIT" property="isUsable" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    update comment
-    set is_usable = 0
+    delete from comment
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.myblog.model.Comment">
@@ -23,8 +22,8 @@
     insert into comment (type, blog_id, create_user_id, 
       create_user_name, create_time, content, 
       is_usable)
-    values (#{type,jdbcType=INTEGER}, #{blogId,jdbcType=INTEGER}, #{createUserId,jdbcType=INTEGER}, 
-      #{createUserName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR}, 
+    values (#{type,jdbcType=INTEGER}, #{blogId,jdbcType=INTEGER}, #{createUserId,jdbcType=INTEGER},
+      #{createUserName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR},
       #{isUsable,jdbcType=BIT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.myblog.model.Comment">
@@ -50,5 +49,25 @@
     is_usable
     from comment
     where is_usable = 1
+  </select>
+  <select id="pageAll" parameterType="com.myblog.model.Comment" resultMap="BaseResultMap">
+    select id, type, blog_id, create_user_id, create_user_name, create_time, content,
+    is_usable
+    from comment
+    where is_usable = 1
+    and type = #{type}
+    <if test="blogId != null">
+      and blog_id = #{blogId}
+    </if>
+    order by create_time desc
+    limit #{page},#{pageSize}
+  </select>
+  <select id="countAll" parameterType="com.myblog.model.Comment" resultType="java.lang.Long">
+    SELECT count(0) FROM comment
+    where is_usable = 1
+    and type = #{type}
+    <if test="blogId != null">
+      and blog_id = #{blogId}
+    </if>
   </select>
 </mapper>

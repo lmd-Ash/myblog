@@ -19,4 +19,20 @@ public interface CommentMapper {
     List<Comment> selectAll();
 
     int updateByPrimaryKey(Comment record);
+
+    /**
+     * 分页查询评论
+     *
+     * @param comment
+     * @return
+     */
+    List<Comment> pageAll(Comment comment);
+
+    /**
+     * 计算总条数
+     *
+     * @param comment
+     * @return
+     */
+    Long countAll(Comment comment);
 }
