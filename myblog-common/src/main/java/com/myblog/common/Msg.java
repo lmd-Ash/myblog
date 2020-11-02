@@ -52,7 +52,16 @@ public interface Msg {
     String TEXT_USER_DATA_FAIL = "用户不存在,请先注册";
 
     Integer BLOG_FAIL = 350;
-    String BLOG_DELETE_FAIL = "博客已被删除，请刷新页面";
+    String TEXT_BLOG_FAIL = "博客不存在";
+    String TEXT_BLOG_DELETE_FAIL = "删除博客失败，请刷新页面";
+    String TEXT_BLOG_TITLE_FAIL = "博客标题不能为空";
+    String TEXT_BLOG_TYPE_FAIL = "请选择博客分类";
+    String TEXT_BLOG_KEYWORD_FAIL = "博客关键词不能为空";
+    String TEXT_BLOG_ABSTRACT_FAIL = "请填写博客摘要";
+
+    Integer COMMENT_FAIL = 360;
+    String TEXT_COMMENT_TYPE_FAIL = "评论类型未传";
+    String TEXT_COMMENT_FAIL = "评论已被删除";
 
     Integer LOGIN_FAIL = 410;
     String TEXT_LOGIN_FAIL = "用户名或密码不正确";

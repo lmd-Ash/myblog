@@ -12,8 +12,7 @@
     <result column="token" jdbcType="VARCHAR" property="token" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    update blog_user
-    set is_usable = 0
+    delete from blog_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.myblog.model.User">

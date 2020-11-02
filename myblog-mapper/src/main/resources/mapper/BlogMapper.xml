@@ -11,14 +11,15 @@
     <result column="is_usable" jdbcType="BIT" property="isUsable" />
     <result column="create_time" jdbcType="DATE" property="createTime" />
     <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user_id" jdbcType="INTEGER" property="updateUserId" />
+    <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
     <result column="blog_title" jdbcType="LONGVARCHAR" property="blogTitle" />
     <result column="blog_abstract" jdbcType="LONGVARCHAR" property="blogAbstract" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    update blog
-    set is_usable = 0
+    delete from blog
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.myblog.model.Blog">
@@ -27,13 +28,15 @@
     </selectKey>
     insert into blog (blog_type, see_num, comment_num, 
       praise_num, blog_keyword, is_usable, 
-      create_time, create_user_id, update_time, 
-      update_user_id, blog_title, blog_abstract
+      create_time, create_user_id, create_user_name,
+      update_time, update_user_id, update_user_name,
+      blog_title, blog_abstract
       )
     values (#{blogType,jdbcType=INTEGER}, #{seeNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER},
       #{praiseNum,jdbcType=INTEGER}, #{blogKeyword,jdbcType=VARCHAR}, #{isUsable,jdbcType=BIT}, 
-      #{createTime,jdbcType=DATE}, #{createUserId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateUserId,jdbcType=INTEGER}, #{blogTitle,jdbcType=LONGVARCHAR}, #{blogAbstract,jdbcType=LONGVARCHAR}
+      #{createTime,jdbcType=DATE}, #{createUserId,jdbcType=INTEGER},#{createUserName,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=INTEGER}, #{updateUserName,jdbcType=VARCHAR},
+      #{blogTitle,jdbcType=LONGVARCHAR}, #{blogAbstract,jdbcType=LONGVARCHAR}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.myblog.model.Blog">
@@ -44,10 +47,12 @@
       praise_num = #{praiseNum,jdbcType=INTEGER},
       blog_keyword = #{blogKeyword,jdbcType=VARCHAR},
       is_usable = #{isUsable,jdbcType=BIT},
-      create_time = #{createTime,jdbcType=DATE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_user_id = #{updateUserId,jdbcType=INTEGER},
+      update_user_name = #{updateUserName,jdbcType=VARCHAR},
       blog_title = #{blogTitle,jdbcType=LONGVARCHAR},
       blog_abstract = #{blogAbstract,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
@@ -65,32 +70,32 @@
     from blog
     where is_usable = 1
   </select>
-  <select id="pageAll" parameterType="java.util.Map" resultMap="BaseResultMap">
+  <select id="pageAll" parameterType="com.myblog.model.Blog" resultMap="BaseResultMap">
     select id, blog_type, see_num, comment_num, praise_num, blog_keyword, is_usable,
     create_time, create_user_id, update_time, update_user_id, blog_title, blog_abstract
     from blog
     where is_usable = 1
-    <if test="blogKeyword != null or blogKeyword !=''">
+    <if test="blogKeyword != null and blogKeyword !=''">
       and blog_keyword like concat('%',#{blogKeyword},'%')
     </if>
     <if test="blogType != null">
       and blog_type = #{blogType}
     </if>
-    <if test="blogTitle != null or blogTitle !=''">
+    <if test="blogTitle != null and blogTitle !=''">
       and blog_title like concat('%',#{blogTitle},'%')
     </if>
     order by create_time desc
     limit #{page},#{pageSize}
   </select>
-  <select id="countAll" parameterType="java.util.Map" resultMap="BaseResultMap">
+  <select id="countAll" parameterType="com.myblog.model.Blog" resultType="java.lang.Long">
     SELECT count(0) FROM blog where is_usable = 1
-    <if test="blogKeyword != null or blogKeyword !=''">
+    <if test="blogKeyword != null and blogKeyword !=''">
       and blog_keyword like concat('%',#{blogKeyword},'%')
     </if>
     <if test="blogType != null">
       and blog_type = #{blogType}
     </if>
-    <if test="blogTitle != null or blogTitle !=''">
+    <if test="blogTitle != null and blogTitle !=''">
       and blog_title like concat('%',#{blogTitle},'%')
     </if>
   </select>
@@ -99,7 +104,7 @@
     create_time, create_user_id, update_time, update_user_id, blog_title, blog_abstract
     from blog
     where is_usable = 1
-    <if test="blogKeyword != null or blogKeyword !=''">
+    <if test="blogKeyword != null and blogKeyword !=''">
       and blog_keyword like concat('%',#{blogKeyword},'%')
     </if>
   </select>
@@ -117,8 +122,16 @@
     create_time, create_user_id, update_time, update_user_id, blog_title, blog_abstract
     from blog
     where is_usable = 1
-    <if test="blogTitle != null or blogTitle !=''">
+    <if test="blogTitle != null and blogTitle !=''">
       and blog_title like concat('%',#{blogTitle},'%')
     </if>
   </select>
+  <update id="deleteBlog" parameterType="com.myblog.model.Blog">
+     update blog
+    set is_usable = 0,
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user_id = #{updateUserId,jdbcType=INTEGER},
+      update_user_name = #{updateUserName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

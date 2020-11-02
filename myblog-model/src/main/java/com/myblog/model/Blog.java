@@ -44,6 +44,11 @@ public class Blog implements Serializable {
     private Integer createUserId;
 
     /**
+     * 创建人
+     */
+    private String createUserName;
+
+    /**
      * 修改时间
      */
     private Date updateTime;
@@ -52,6 +57,11 @@ public class Blog implements Serializable {
      * 修改人
      */
     private Integer updateUserId;
+
+    /**
+     * 修改人
+     */
+    private String updateUserName;
 
     /**
      * 博客被观看次数
@@ -83,4 +93,13 @@ public class Blog implements Serializable {
      */
     private Boolean isUsable;
 
+    /**
+     * 当前页
+     */
+    private Integer page;
+
+    /**
+     * 每页条数
+     */
+    private Integer pageSize;
 }

@@ -64,8 +64,9 @@ public interface BlogService {
     /**
      * 删除博客
      *
-     * @param id
+     * @param blog
+     * @param user
      * @return
      */
-    Integer deleteBlog(Integer id);
+    Integer deleteBlog(Blog blog, User user);
 }

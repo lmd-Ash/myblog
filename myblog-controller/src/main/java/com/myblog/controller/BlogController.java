@@ -5,11 +5,15 @@ import com.myblog.common.MallPage;
 import com.myblog.common.Msg;
 import com.myblog.common.Result;
 import com.myblog.model.Blog;
+import com.myblog.model.User;
 import com.myblog.req.BlogReq;
 import com.myblog.resp.BlogResp;
 import com.myblog.service.BlogService;
+import com.myblog.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -25,8 +29,49 @@ import java.util.Objects;
 @RequestMapping("/blog")
 @Slf4j
 public class BlogController {
+    /**
+     * session用户Key
+     */
+    @Value("${session.user.key}")
+    private String userSession;
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private UserService userService;
+
+    /**
+     * 保存博客
+     *
+     * @param blogReq
+     * @param session
+     * @return
+     */
+    @PostMapping("/save")
+    public Result<Boolean> save(@RequestBody BlogReq blogReq, HttpSession session) {
+        User user = (User) session.getAttribute(userSession);
+        user = userService.findById(user.getId());
+        if (Objects.isNull(user)) {
+            return Result.build(Msg.DATA_FAIL, Msg.TEXT_USER_DATA_FAIL);
+        }
+        if (StringUtils.isBlank(blogReq.getBlogTitle())) {
+            return Result.build(Msg.BLOG_FAIL, Msg.TEXT_BLOG_TITLE_FAIL);
+        }
+        if (Objects.isNull(blogReq.getBlogType())) {
+            return Result.build(Msg.BLOG_FAIL, Msg.TEXT_BLOG_TYPE_FAIL);
+        }
+        if (StringUtils.isBlank(blogReq.getBlogKeyword())) {
+            return Result.build(Msg.BLOG_FAIL, Msg.TEXT_BLOG_KEYWORD_FAIL);
+        }
+        if (StringUtils.isBlank(blogReq.getBlogAbstract())) {
+            return Result.build(Msg.BLOG_FAIL, Msg.TEXT_BLOG_ABSTRACT_FAIL);
+        }
+        Blog blog = BeanMapper.map(blogReq, Blog.class);
+        Integer integer = blogService.saveBlog(blog, user);
+        if (integer < 1) {
+            return Result.buildSaveFail();
+        }
+        return Result.buildSaveOk();
+    }
 
     /**
      * 分页查询博客
@@ -42,7 +87,7 @@ public class BlogController {
         //查询总条数
         Long integer = blogService.countAll(blog);
         mallPage.setContent(BeanMapper.mapList(blogs, BlogResp.class));
-        mallPage.setPage(blogReq.getPage() + 1);
+        mallPage.setPage(blogReq.getPage());
         mallPage.setPageSize(blogReq.getPageSize());
         mallPage.setTotalNumber(integer);
         //总页数
@@ -64,7 +109,7 @@ public class BlogController {
         }
         Blog blog = blogService.findById(blogReq.getId());
         if (Objects.isNull(blog)) {
-            return Result.build(Msg.BLOG_FAIL, Msg.BLOG_DELETE_FAIL);
+            return Result.build(Msg.BLOG_FAIL, Msg.TEXT_BLOG_DELETE_FAIL);
         }
         Boolean likeBlog = blogService.likeBlog(blog);
         if (!likeBlog) {
@@ -82,16 +127,21 @@ public class BlogController {
      */
     @PostMapping("/deleteBlog")
     public Result<Boolean> deleteBlog(@RequestBody BlogReq blogReq, HttpSession session) {
+        User user = (User) session.getAttribute(userSession);
+        user = userService.findById(user.getId());
+        if (Objects.isNull(user)) {
+            return Result.build(Msg.DATA_FAIL, Msg.TEXT_USER_DATA_FAIL);
+        }
         if (Objects.isNull(blogReq.getId())) {
             return Result.buildParamFail();
         }
         Blog blog = blogService.findById(blogReq.getId());
         if (Objects.isNull(blog)) {
-            return Result.build(Msg.BLOG_FAIL, Msg.BLOG_DELETE_FAIL);
+            return Result.build(Msg.BLOG_FAIL, Msg.TEXT_BLOG_DELETE_FAIL);
         }
-        Integer deleteBlog = blogService.deleteBlog(blogReq.getId());
+        Integer deleteBlog = blogService.deleteBlog(blog, user);
         if (deleteBlog < 1) {
-            return Result.build(Msg.FAIL, Msg.BLOG_DELETE_FAIL);
+            return Result.build(Msg.FAIL, Msg.TEXT_BLOG_DELETE_FAIL);
         }
         return Result.build(Msg.OK, Msg.TEXT_DELETE_OK);
     }

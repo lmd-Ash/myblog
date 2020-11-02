@@ -39,9 +39,9 @@ public class JwtUtil {
      */
     private static final String ISSUER = "admin";
     /**
-     * 过期时间
+     * 过期时间  3600000 毫秒->60分钟
      */
-    private static final Long EXPIRE = 900000L;
+    private static final Long EXPIRE = 3600000L;
 
     /**
      * 生成token
@@ -134,6 +134,7 @@ public class JwtUtil {
         try {
             return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("token解析错误");
             return null;
         }

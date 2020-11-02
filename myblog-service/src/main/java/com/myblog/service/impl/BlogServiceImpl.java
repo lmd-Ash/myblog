@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author lmd
@@ -25,10 +24,12 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Integer saveBlog(Blog blog, User user) {
+        blog.setId(null);
         blog.setIsUsable(true);
         //新写的blog，观看数，评论数，被赞数都为0
         blog.setCreateTime(new Date());
         blog.setCreateUserId(user.getId());
+        blog.setCreateUserName(user.getUserName());
         blog.setCommentNum(0);
         blog.setPraiseNum(0);
         blog.setSeeNum(0);
@@ -38,7 +39,9 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<Blog> pageAll(Blog blog, Integer page, Integer pageSize) {
-        List<Blog> list = blogMapper.pageAll(blog, page, pageSize);
+        blog.setPage(page * pageSize);
+        blog.setPageSize((page + 1) * pageSize);
+        List<Blog> list = blogMapper.pageAll(blog);
         return list;
     }
 
@@ -73,8 +76,11 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Integer deleteBlog(Integer id) {
-        int delete = blogMapper.deleteByPrimaryKey(id);
+    public Integer deleteBlog(Blog blog, User user) {
+        blog.setUpdateUserId(user.getId());
+        blog.setUpdateTime(new Date());
+        blog.setUpdateUserName(user.getUserName());
+        int delete = blogMapper.deleteBlog(blog);
         return delete;
     }
 }

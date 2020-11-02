@@ -57,4 +57,14 @@ public class Comment implements Serializable {
      * 是否可用：1：是，0：否
      */
     private Boolean isUsable;
+
+    /**
+     * 当前页
+     */
+    private Integer page;
+
+    /**
+     * 每页条数
+     */
+    private Integer pageSize;
 }

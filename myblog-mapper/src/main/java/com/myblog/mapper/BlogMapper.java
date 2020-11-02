@@ -1,6 +1,7 @@
 package com.myblog.mapper;
 
 import com.myblog.model.Blog;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,11 +25,9 @@ public interface BlogMapper {
      * 分页查询博客
      *
      * @param blog
-     * @param page     当前页
-     * @param pageSize 每页数量
      * @return
      */
-    List<Blog> pageAll(Blog blog, Integer page, Integer pageSize);
+    List<Blog> pageAll(Blog blog);
 
     /**
      * 计算总条数
@@ -61,4 +60,12 @@ public interface BlogMapper {
      * @return
      */
     List<Blog> selectByBlogTitle(String blogTitle);
+
+    /**
+     * 删除博客
+     *
+     * @param blog
+     * @return
+     */
+    Integer deleteBlog(Blog blog);
 }
