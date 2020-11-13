@@ -9,7 +9,7 @@
     <result column="praise_num" jdbcType="INTEGER" property="praiseNum" />
     <result column="blog_keyword" jdbcType="VARCHAR" property="blogKeyword" />
     <result column="is_usable" jdbcType="BIT" property="isUsable" />
-    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -34,7 +34,7 @@
       )
     values (#{blogType,jdbcType=INTEGER}, #{seeNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER},
       #{praiseNum,jdbcType=INTEGER}, #{blogKeyword,jdbcType=VARCHAR}, #{isUsable,jdbcType=BIT}, 
-      #{createTime,jdbcType=DATE}, #{createUserId,jdbcType=INTEGER},#{createUserName,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER},#{createUserName,jdbcType=VARCHAR},
       #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=INTEGER}, #{updateUserName,jdbcType=VARCHAR},
       #{blogTitle,jdbcType=LONGVARCHAR}, #{blogAbstract,jdbcType=LONGVARCHAR}
       )
