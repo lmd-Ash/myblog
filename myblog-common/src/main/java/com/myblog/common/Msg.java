@@ -61,7 +61,10 @@ public interface Msg {
 
     Integer COMMENT_FAIL = 360;
     String TEXT_COMMENT_TYPE_FAIL = "评论类型未传";
+    String TEXT_COMMENT_CONTENT_FAIL = "评论内容不能为空";
     String TEXT_COMMENT_FAIL = "评论已被删除";
+    String TEXT_COMMENT_DELETE_FAIL = "删除评论失败，请刷新页面";
+    String TEXT_COMMENT_ID_FAIL = "评论id未传";
 
     Integer LOGIN_FAIL = 410;
     String TEXT_LOGIN_FAIL = "用户名或密码不正确";
@@ -87,6 +90,9 @@ public interface Msg {
 
     Integer REQUEST_FAIL = 501;
     String TEXT_REQUEST_FAIL = "请求方式错误，当前请求方式为[#nowReq#],实际支持请求方式为[#req#]";
+
+    Integer SQL_FAIL = 505;
+    String TEXT_SQL_FAIL = "sql语法错误";
 
     /**
      * 不受火之冀望的人，比比皆是。

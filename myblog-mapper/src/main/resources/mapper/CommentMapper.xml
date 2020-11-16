@@ -70,4 +70,12 @@
       and blog_id = #{blogId}
     </if>
   </select>
+  <update id="deleteComment" parameterType="com.myblog.model.Comment">
+    update comment
+    set is_usable = 0,
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

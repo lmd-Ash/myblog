@@ -43,4 +43,19 @@ public class CommentServiceImpl implements CommentService {
         Long countAll = commentMapper.countAll(comment);
         return countAll;
     }
+
+    @Override
+    public Comment findById(Integer id) {
+        Comment comment = commentMapper.selectByPrimaryKey(id);
+        return comment;
+    }
+
+    @Override
+    public Integer deleteComment(Comment comment, User user) {
+        comment.setCreateTime(new Date());
+        comment.setCreateUserId(user.getId());
+        comment.setCreateUserName(user.getUserName());
+        Integer deleteComment = commentMapper.deleteComment(comment);
+        return deleteComment;
+    }
 }

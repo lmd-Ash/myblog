@@ -50,4 +50,32 @@
     from comment_reply
     and is_usable = 1
   </select>
+  <select id="pageAll" parameterType="com.myblog.model.CommentReply" resultMap="BaseResultMap">
+    select id, comment_id, create_user_id, create_user_name, create_time, content, reply_user_id,
+    is_usable
+    from comment_reply
+    where is_usable = 1
+    and comment_id = #{commentId}
+    <if test="reply_user_id != null">
+      and reply_user_id = #{replyUserId}
+    </if>
+    order by create_time desc
+    limit #{page},#{pageSize}
+  </select>
+  <select id="countAll" parameterType="com.myblog.model.CommentReply" resultType="java.lang.Long">
+    SELECT count(0) FROM comment_reply
+    where is_usable = 1
+    and comment_id = #{commentId}
+    <if test="reply_user_id != null">
+      and reply_user_id = #{replyUserId}
+    </if>
+  </select>
+  <update id="deleteCommentReply" parameterType="com.myblog.model.CommentReply">
+    update comment_reply
+    set is_usable = 0,
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

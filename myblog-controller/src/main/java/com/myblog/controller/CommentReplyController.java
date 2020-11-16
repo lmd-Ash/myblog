@@ -5,9 +5,11 @@ import com.myblog.common.MallPage;
 import com.myblog.common.Msg;
 import com.myblog.common.Result;
 import com.myblog.model.Comment;
+import com.myblog.model.CommentReply;
 import com.myblog.model.User;
-import com.myblog.req.CommentReq;
-import com.myblog.resp.CommentResp;
+import com.myblog.req.CommentReplyReq;
+import com.myblog.resp.CommentReplyResp;
+import com.myblog.service.CommentReplyService;
 import com.myblog.service.CommentService;
 import com.myblog.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,41 +28,47 @@ import java.util.Objects;
  * @date 2020/10/31
  */
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/commentReply")
 @Slf4j
-public class CommentController {
+public class CommentReplyController {
     /**
      * session用户Key
      */
     @Value("${session.user.key}")
     private String userSession;
     @Autowired
+    private CommentReplyService commentReplyService;
+    @Autowired
     private CommentService commentService;
     @Autowired
     private UserService userService;
 
     /**
-     * 保存评论
+     * 保存评论回复
      *
-     * @param commentReq
+     * @param commentReplyReq
      * @param session
      * @return
      */
     @PostMapping("/save")
-    public Result<Boolean> save(@RequestBody CommentReq commentReq, HttpSession session) {
+    public Result<Boolean> save(@RequestBody CommentReplyReq commentReplyReq, HttpSession session) {
         User user = (User) session.getAttribute(userSession);
         user = userService.findById(user.getId());
         if (Objects.isNull(user)) {
             return Result.build(Msg.DATA_FAIL, Msg.TEXT_USER_DATA_FAIL);
         }
-        if (Objects.isNull(commentReq.getType())) {
-            return Result.build(Msg.COMMENT_FAIL, Msg.TEXT_COMMENT_TYPE_FAIL);
+        if (Objects.isNull(commentReplyReq.getCommentId())) {
+            return Result.build(Msg.COMMENT_FAIL, Msg.TEXT_COMMENT_ID_FAIL);
         }
-        if (StringUtils.isBlank(commentReq.getContent())) {
+        Comment comment = commentService.findById(commentReplyReq.getCommentId());
+        if (Objects.isNull(comment)) {
+            return Result.build(Msg.COMMENT_FAIL, Msg.TEXT_COMMENT_FAIL);
+        }
+        if (StringUtils.isBlank(commentReplyReq.getContent())) {
             return Result.build(Msg.COMMENT_FAIL, Msg.TEXT_COMMENT_CONTENT_FAIL);
         }
-        Comment comment = BeanMapper.map(commentReq, Comment.class);
-        Integer integer = commentService.saveComment(comment, user);
+        CommentReply commentReply = BeanMapper.map(commentReplyReq, CommentReply.class);
+        Integer integer = commentReplyService.saveCommentReply(commentReply, user);
         if (integer < 1) {
             return Result.buildSaveFail();
         }
@@ -70,48 +78,48 @@ public class CommentController {
     /**
      * 分页查询评论
      *
-     * @param commentReq
+     * @param commentReplyReq
      * @return
      */
     @GetMapping("/pageAll")
-    public Result<MallPage<CommentResp>> pageAll(CommentReq commentReq) {
-        MallPage<CommentResp> mallPage = new MallPage<>();
-        Comment comment = BeanMapper.map(commentReq, Comment.class);
-        List<Comment> blogs = commentService.pageAll(comment, commentReq.getPage(), commentReq.getPageSize());
+    public Result<MallPage<CommentReplyResp>> pageAll(CommentReplyReq commentReplyReq) {
+        MallPage<CommentReplyResp> mallPage = new MallPage<>();
+        CommentReply commentReply = BeanMapper.map(commentReplyReq, CommentReply.class);
+        List<CommentReply> blogs = commentReplyService.pageAll(commentReply, commentReplyReq.getPage(), commentReplyReq.getPageSize());
         //查询总条数
-        Long integer = commentService.countAll(comment);
-        mallPage.setContent(BeanMapper.mapList(blogs, CommentResp.class));
-        mallPage.setPage(commentReq.getPage());
-        mallPage.setPageSize(commentReq.getPageSize());
+        Long integer = commentReplyService.countAll(commentReply);
+        mallPage.setContent(BeanMapper.mapList(blogs, CommentReplyResp.class));
+        mallPage.setPage(commentReplyReq.getPage());
+        mallPage.setPageSize(commentReplyReq.getPageSize());
         mallPage.setTotalNumber(integer);
         //总页数
-        mallPage.setTotalPages(Integer.parseInt(integer.toString()) / commentReq.getPageSize());
+        mallPage.setTotalPages(Integer.parseInt(integer.toString()) / commentReplyReq.getPageSize());
         return Result.buildQueryOk(mallPage);
     }
 
     /**
      * 删除博客
      *
-     * @param commentReq
+     * @param commentReplyReq
      * @param session
      * @return
      */
     @PostMapping("/deleteComment")
-    public Result<Boolean> deleteComment(@RequestBody CommentReq commentReq, HttpSession session) {
+    public Result<Boolean> deleteComment(@RequestBody CommentReplyReq commentReplyReq, HttpSession session) {
         User user = (User) session.getAttribute(userSession);
         user = userService.findById(user.getId());
         if (Objects.isNull(user)) {
             return Result.build(Msg.DATA_FAIL, Msg.TEXT_USER_DATA_FAIL);
         }
-        if (Objects.isNull(commentReq.getId())) {
+        if (Objects.isNull(commentReplyReq.getId())) {
             return Result.buildParamFail();
         }
-        Comment comment = commentService.findById(commentReq.getId());
-        if (Objects.isNull(comment)) {
+        CommentReply commentReply = commentReplyService.findById(commentReplyReq.getId());
+        if (Objects.isNull(commentReply)) {
             return Result.build(Msg.COMMENT_FAIL, Msg.TEXT_COMMENT_FAIL);
         }
-        Integer deleteComment = commentService.deleteComment(comment, user);
-        if (deleteComment < 1) {
+        Integer deleteCommentReply = commentReplyService.deleteCommentReply(commentReply, user);
+        if (deleteCommentReply < 1) {
             return Result.build(Msg.FAIL, Msg.TEXT_COMMENT_DELETE_FAIL);
         }
         return Result.build(Msg.OK, Msg.TEXT_DELETE_OK);

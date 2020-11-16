@@ -37,4 +37,21 @@ public interface CommentService {
      * @return
      */
     Long countAll(Comment comment);
+
+    /**
+     * 根据id查询评论
+     *
+     * @param id
+     * @return
+     */
+    Comment findById(Integer id);
+
+    /**
+     * 删除评论
+     *
+     * @param comment
+     * @param user
+     * @return
+     */
+    Integer deleteComment(Comment comment, User user);
 }

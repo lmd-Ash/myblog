@@ -35,4 +35,12 @@ public interface CommentMapper {
      * @return
      */
     Long countAll(Comment comment);
+
+    /**
+     * 删除评论
+     *
+     * @param comment
+     * @return
+     */
+    Integer deleteComment(Comment comment);
 }
