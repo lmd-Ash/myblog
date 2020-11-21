@@ -76,7 +76,7 @@ public class CommentReplyController {
     }
 
     /**
-     * 分页查询评论
+     * 分页查询回复
      *
      * @param commentReplyReq
      * @return
@@ -98,7 +98,7 @@ public class CommentReplyController {
     }
 
     /**
-     * 删除博客
+     * 删除回复
      *
      * @param commentReplyReq
      * @param session
