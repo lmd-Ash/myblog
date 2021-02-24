@@ -3,7 +3,9 @@ package com.myblog.common;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,7 @@ public class AshOneAdvice {
     public void AshCheck() {
     }
 
+    @Around("AshCheck()")
     public Object AshCheckOne(ProceedingJoinPoint joinPoint) throws Throwable {
         System.out.println("================第一个切面=================" + System.currentTimeMillis());
         //获取请求参数
