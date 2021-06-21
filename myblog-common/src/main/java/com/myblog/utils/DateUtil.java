@@ -1,11 +1,14 @@
 package com.myblog.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author lmd
@@ -155,14 +158,32 @@ public class DateUtil {
     }
 
     /**
-     * 线程安全的date转string
+     * 线程安全的date转string,年月日时分秒
      *
      * @param date 时间
      * @return string 字符串
      */
-    public static String dateToString(Date date) {
+    public static String dateToDateTimeString(Date date) {
+        if (Objects.isNull(date)) {
+            return "";
+        }
         LocalDateTime localDateTime = dateToLocalDateTime(date);
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern(DATE_TIME_TYPE);
+        return localDateTime.format(fmt);
+    }
+
+    /**
+     * 线程安全的date转string,年月日
+     *
+     * @param date 时间
+     * @return string 字符串
+     */
+    public static String dateToDateString(Date date) {
+        if (Objects.isNull(date)) {
+            return "";
+        }
+        LocalDateTime localDateTime = dateToLocalDateTime(date);
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern(DATE_TYPE);
         return localDateTime.format(fmt);
     }
 
@@ -280,4 +301,24 @@ public class DateUtil {
         LocalDateTime localDateTime = LocalDateTime.of(firstMonthLocalDate, LocalTime.MAX);
         return localDateTimeToDate(localDateTime);
     }
+
+    /**
+     * 计算两个时间的差值
+     *
+     * @param timeStart 被减数时间
+     * @param timeEnd   减数时间
+     * @return 差值
+     */
+    public static long timeDifference(String timeStart, String timeEnd) {
+        if (StringUtils.isBlank(timeStart) || StringUtils.isBlank(timeEnd)) {
+            return 0L;
+        }
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern(DATE_TYPE);
+        // 被减数时间LocalDate
+        LocalDate localDateStart = LocalDate.parse(timeStart, fmt);
+        // 减数时间LocalDate
+        LocalDate localDateEnd = LocalDate.parse(timeEnd, fmt);
+        return localDateStart.toEpochDay() - localDateEnd.toEpochDay();
+    }
+
 }

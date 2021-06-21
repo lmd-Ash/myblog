@@ -15,6 +15,8 @@ public class NumberUtils {
     private static final Pattern PATTERN = Pattern.compile("^[-\\+]?[\\d]*$");
     private static final String DECIMAL_POINT = ".";
     private static final String SPLITS = "\\.";
+    private static final Pattern NUMBER = Pattern.compile("^([0-9][0-9]*)+(\\.[0-9]{1,2})?$");
+//    ^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$
 
     /**
      * 判断string是否是数字
@@ -27,6 +29,19 @@ public class NumberUtils {
             return false;
         }
         return PATTERN.matcher(str).matches();
+    }
+
+    /**
+     * 判断是否是小数
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isNumberAndPoint(String str) {
+        if (StringUtils.isBlank(str)) {
+            return false;
+        }
+        return NUMBER.matcher(str).matches();
     }
 
     /**
@@ -46,7 +61,6 @@ public class NumberUtils {
             }
         }
         return isInteger(str);
-
     }
 
 }
